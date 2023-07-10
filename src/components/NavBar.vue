@@ -2,13 +2,28 @@
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
 import {Bars3Icon, XMarkIcon} from '@heroicons/vue/24/outline'
 import OldScale from '../assets/old-scale.png'
+import {onMounted, ref} from "vue";
+import { getAuth, signOut} from "firebase/auth";
+import router from "@/router";
 
 const navigation = [
   {name: 'Dashboard', to: '/dashboard'},
   {name: 'Weight input', to: '/weight-input'},
   {name: 'Profile', to: '/profile'},
-  {name: 'Sign out', to: '/sign-out'},
 ]
+
+let auth;
+onMounted(() => {
+  auth = getAuth();
+});
+
+const handleSignOut = () => {
+  signOut(auth).then(() => {
+    router.push('/')
+  }).catch((error) => {
+    // An error happened.
+  });
+}
 </script>
 
 <template>
@@ -35,6 +50,7 @@ const navigation = [
                           :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
                           :aria-current="item.current ? 'page' : undefined">{{ item.name }}
               </RouterLink>
+              <button class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Sign out</button>
             </div>
           </div>
         </div>
@@ -60,6 +76,7 @@ const navigation = [
             {{ item.name }}
           </DisclosureButton>
         </RouterLink>
+        <div class="text-black block rounded-md px-3 py-2 text-base font-medium text-center" @click="handleSignOut">Sign out</div>
       </div>
     </DisclosurePanel>
   </Disclosure>
