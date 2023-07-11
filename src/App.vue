@@ -9,11 +9,7 @@ let auth;
 onMounted(() => {
   auth = getAuth();
   onAuthStateChanged(auth, (user) => {
-    if (user) {
-      isLoggedIn.value = true;
-    } else {
-      isLoggedIn.value = false;
-    }
+    isLoggedIn.value = !!user;
   });
 })
 

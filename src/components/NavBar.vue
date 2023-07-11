@@ -1,6 +1,6 @@
 <script setup>
 import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
-import {Bars3Icon, XMarkIcon} from '@heroicons/vue/24/outline'
+import {Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
 import OldScale from '../assets/old-scale.png'
 import {onMounted, ref} from "vue";
 import { getAuth, signOut} from "firebase/auth";
@@ -56,12 +56,7 @@ const handleSignOut = () => {
         </div>
         <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
           <!-- Profile dropdown -->
-          <RouterLink to="/profile" class="relative ml-3">
-                <span class="sr-only">Open user menu</span>
-                <img class="h-8 w-8 rounded-full"
-                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                     alt=""/>
-          </RouterLink>
+            <ArrowRightOnRectangleIcon class="h-6 cursor-pointer hover:text-gray-600" @click="handleSignOut"/>
         </div>
       </div>
     </div>
@@ -76,7 +71,6 @@ const handleSignOut = () => {
             {{ item.name }}
           </DisclosureButton>
         </RouterLink>
-        <div class="text-black block rounded-md px-3 py-2 text-base font-medium text-center" @click="handleSignOut">Sign out</div>
       </div>
     </DisclosurePanel>
   </Disclosure>

@@ -50,6 +50,7 @@ const weeks = [
     weekNumber: 28,
     weekStartDate: new Date(2023, 6, 3),
     weekEndDate: new Date(2023, 6, 9),
+    weeklyAverage: 0,
     days: [{
       date: new Date(2023, 6, 3),
       currentWeight: 128.2,
@@ -82,6 +83,25 @@ const weeks = [
   }
 ];
 
+// console.log(weeks)
+//
+// // find the latest week
+// const latestWeek = weeks[weeks.length - 1];
+// const calculateAverageWeight = (latestWeek) => {
+//   const avg = latestWeek.days.reduce((acc, day) => {
+//     return acc + day.currentWeight;
+//   }, 0) / latestWeek.days.length;
+//   latestWeek.weeklyAverage = (avg.toFixed(1));
+// }
+//
+// calculateAverageWeight(latestWeek);
+//
+// console.log(weeks)
+
+
+
+
+
 const calculateAverageWeight = () => {
   const averageWeights = [];
   for (const week of weeks) {
@@ -96,15 +116,9 @@ const calculateAverageWeight = () => {
   return averageWeights;
 }
 
-console.log(calculateAverageWeight());
-
 const vmi = calculateAverageWeight().map((week) => {
   return [week.weekNumber, week.averageWeight];
 });
-
-console.log(vmi);
-
-console.log(weeks);
 
 const chartData = [
   ['Date', 'Weight'],
@@ -115,7 +129,7 @@ const chartOptions = {
     title: 'Weight loss',
     subtitle: 'Weight loss between x and y',
   },
-  colors: ['black'],
+  colors: ['#22c55e'],
 };
 
 </script>
@@ -126,7 +140,7 @@ const chartOptions = {
       <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Dashboard</h2>
     </div>
     <GChart
-        type="LineChart"
+        type="ColumnChart"
         :data="chartData"
         :options="chartOptions"
     />
