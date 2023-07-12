@@ -5,6 +5,7 @@ import {onMounted, ref} from "vue";
 
 const isLoggedIn = ref(false);
 
+
 let auth;
 onMounted(() => {
   auth = getAuth();
