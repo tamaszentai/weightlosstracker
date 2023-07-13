@@ -5,7 +5,9 @@ import OldScale from '../assets/old-scale.png'
 import {onMounted, ref} from "vue";
 import { getAuth, signOut} from "firebase/auth";
 import router from "@/router";
+import {useWeightsStore} from "@/stores/weights";
 
+const weightsStore = useWeightsStore();
 const navigation = [
   {name: 'Dashboard', to: '/dashboard'},
   {name: 'Weight input', to: '/weight-input'},
@@ -20,6 +22,8 @@ onMounted(() => {
 const handleSignOut = () => {
   signOut(auth).then(() => {
     router.push('/')
+    weightsStore.deleteCurrentUser();
+
   }).catch((error) => {
     // An error happened.
   });

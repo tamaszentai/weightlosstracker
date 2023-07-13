@@ -2,6 +2,7 @@
 import {GChart} from "vue-google-charts";
 import {useWeightsStore} from "@/stores/weights";
 import {onMounted} from "vue";
+import {getAuth} from "firebase/auth";
 
 const WeightsStore = useWeightsStore();
 const today = new Date();
@@ -10,8 +11,11 @@ const firstDay = new Date(year, 0, 1);
 const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 nap
 const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 
-onMounted(() => {
-  WeightsStore.fetchWeights();
+onMounted(async () => {
+  const currentUser = await getAuth().currentUser;
+  if (currentUser) {
+    await WeightsStore.fetchWeights(currentUser);
+  }
 })
 
 const weeks = [

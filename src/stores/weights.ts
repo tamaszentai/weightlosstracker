@@ -11,20 +11,26 @@ export const useWeightsStore = defineStore('weights', () => {
   const allWeeks = ref(null);
   const isFetched = ref(false);
 
-  currentUser.value = getAuth().currentUser;
 
-  const fetchWeights = async (): Promise<any> => {
+  const fetchWeights = async (loggedUser: User): Promise<any> => {
+    currentUser.value = loggedUser;
     if (isFetched.value) {
       return;
     }
-    const querySnapshot = await getDoc(doc(db, "users", `${currentUser.value?.uid}`));
+    const querySnapshot = await getDoc(doc(db, "users", `${loggedUser.uid}`));
     const data = querySnapshot.data();
     console.log(data);
+  }
+
+  const deleteCurrentUser = () => {
+    currentUser.value = null;
   }
 
   return {
     currentWeek,
     allWeeks,
-    fetchWeights
+    currentUser,
+    fetchWeights,
+    deleteCurrentUser,
   }
 })
