@@ -1,8 +1,8 @@
-import { ref, computed } from 'vue'
-import { defineStore } from 'pinia'
-import {getAuth, User} from "firebase/auth";
+import {computed, ref} from 'vue'
+import {defineStore} from 'pinia'
+import {User} from "firebase/auth";
 import {getFirestore} from "firebase/firestore";
-import {collection, deleteDoc, doc, getDocs, getDoc, setDoc, updateDoc, Timestamp} from '@firebase/firestore';
+import {doc, getDoc} from '@firebase/firestore';
 
 export const useWeightsStore = defineStore('weights', () => {
   const db = getFirestore();
@@ -19,7 +19,7 @@ export const useWeightsStore = defineStore('weights', () => {
     }
     const querySnapshot = await getDoc(doc(db, "users", `${loggedUser.uid}`));
     const data = querySnapshot.data();
-    console.log(data);
+    allWeeks.value = Object.keys(data).map(key => data[key]);
   }
 
   const deleteCurrentUser = () => {

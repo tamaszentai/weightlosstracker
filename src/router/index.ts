@@ -18,7 +18,14 @@ const router = createRouter({
         {
             path: '/',
             name: 'login',
-            component: LoginView
+            component: LoginView,
+            beforeEnter: async (to, from, next) => {
+                if ( await getCurrentUser()) {
+                    next('/dashboard')
+                } else {
+                    next()
+                }
+            },
         },
         {
             path: '/register',
