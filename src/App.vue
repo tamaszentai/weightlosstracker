@@ -2,7 +2,9 @@
 import NavBar from "@/components/NavBar.vue";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
 import {onMounted, ref} from "vue";
+import {useAuthStore} from "./stores/auth";
 
+const authStore = useAuthStore();
 const isLoggedIn = ref(false);
 
 

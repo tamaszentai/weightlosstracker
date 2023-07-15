@@ -10,7 +10,6 @@ import RegisterView from "@/views/RegisterView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 // @ts-ignore
 import ProfileView from "@/views/ProfileView.vue";
-import {getAuth} from "firebase/auth";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -78,7 +77,7 @@ const getCurrentUser = () => {
 
 router.beforeEach(async (to, from, next) => {
     if(to.matched.some(record => record.meta.requiresAuth)) {
-        if (await  getCurrentUser()) {
+        if (await getCurrentUser()) {
             next();
         } else {
             next("/")

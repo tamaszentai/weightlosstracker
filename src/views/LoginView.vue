@@ -1,22 +1,18 @@
 <script setup lang="ts">
-import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
-import {useRouter} from "vue-router";
 import {ref} from "vue";
+import {useAuthStore} from "@/stores/auth";
 
-const router = useRouter();
 const email = ref("");
 const password = ref("");
+const authStore = useAuthStore();
 
 const login = async () => {
   try {
-    await signInWithEmailAndPassword(getAuth(), email.value, password.value)
-    console.log("User logged in")
-    router.push("/dashboard")
+   await authStore.login({email: email.value, password: password.value});
 
   } catch (error) {
     const errorCode = error.code;
     const errorMessage = error.message;
-
   }
 }
 

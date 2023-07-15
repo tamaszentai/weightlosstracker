@@ -1,22 +1,29 @@
 <script setup lang="ts">
 import {GChart} from "vue-google-charts";
 import {useWeightsStore} from "@/stores/weights";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {getAuth} from "firebase/auth";
+import {useAuthStore} from "@/stores/auth";
+import {storeToRefs} from "pinia";
 
-const WeightsStore = useWeightsStore();
+const weightsStore = useWeightsStore();
+const authStore = useAuthStore();
 const today = new Date();
 const year = today.getFullYear();
 const firstDay = new Date(year, 0, 1);
 const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 nap
 const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+const {currentUser} = storeToRefs(authStore);
+const weekss = ref<any[] | null>(null);
+
+console.log(currentUser.value?.uid)
 
 onMounted(async () => {
-  const currentUser = await getAuth().currentUser;
-  if (currentUser) {
-    await WeightsStore.fetchWeights(currentUser);
-  }
+  await weightsStore.fetchWeights(currentUser.value?.uid);
+  weekss.value = weightsStore.allWeeks;
+  console.log(weekss.value)
 })
+
 
 const weeks = [
   {
@@ -144,9 +151,8 @@ const chartOptions = {
 };
 
 </script>
-
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center px-6  lg:px-8">
+  <div v-if="weekss" class="flex min-h-full flex-1 flex-col justify-center px-6  lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Dashboard</h2>
     </div>
