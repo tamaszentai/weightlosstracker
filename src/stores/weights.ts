@@ -19,10 +19,17 @@ export const useWeightsStore = defineStore('weights', () => {
     allWeeks.value = Object.keys(data).map(key => data[key]);
   }
 
+  const reset = () => {
+    currentWeek.value = null;
+    allWeeks.value = [];
+    isFetched.value = false;
+  }
+
 
   return {
     currentWeek,
     allWeeks,
     fetchWeights,
+    reset,
   }
 })

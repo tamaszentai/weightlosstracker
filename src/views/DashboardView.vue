@@ -71,5 +71,8 @@ const chartOptions = {
         :data="chartData"
         :options="chartOptions"
     />
+    <div v-else class="flex justify-center items-center h-64">
+      <p class="text-gray-500">No data to display</p>
+    </div>
   </div>
 </template>

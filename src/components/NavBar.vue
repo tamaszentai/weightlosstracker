@@ -1,8 +1,8 @@
 <script setup>
-import {Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems} from '@headlessui/vue'
+import {Disclosure, DisclosureButton, DisclosurePanel} from '@headlessui/vue'
 import {Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon } from '@heroicons/vue/24/outline'
 import OldScale from '../assets/old-scale.png'
-import {onMounted, ref} from "vue";
+import {onMounted} from "vue";
 import { getAuth, signOut} from "firebase/auth";
 import router from "@/router";
 import {useWeightsStore} from "@/stores/weights";
@@ -21,8 +21,8 @@ onMounted(() => {
 
 const handleSignOut = () => {
   signOut(auth).then(() => {
-    router.push('/')
-    weightsStore.deleteCurrentUser();
+    router.push('/');
+    weightsStore.reset();
 
   }).catch((error) => {
     // An error happened.
@@ -54,7 +54,6 @@ const handleSignOut = () => {
                           :class="[item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white', 'rounded-md px-3 py-2 text-sm font-medium']"
                           :aria-current="item.current ? 'page' : undefined">{{ item.name }}
               </RouterLink>
-              <button class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Sign out</button>
             </div>
           </div>
         </div>
