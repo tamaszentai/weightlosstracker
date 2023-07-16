@@ -4,24 +4,30 @@ import {useWeightsStore} from "@/stores/weights";
 import {onMounted, ref, watch} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
+import type {IWeek} from "@/interfaces/IWeek";
+
+interface IAverageWeight {
+  weekNumber: string;
+  averageWeight: number;
+}
 
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const today = new Date();
 const year = today.getFullYear();
 const firstDay = new Date(year, 0, 1);
-const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 nap
+const pastDays = (+today - +firstDay) / 86400000; // 86400000 ms = 1 day
 const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 const {currentUser} = storeToRefs(authStore);
-const weeks = ref<any[] | null>(null);
-const averageWeights = ref<any[]>([]);
+const weeks = ref<IWeek[]>([]);
+const averageWeights = ref<IAverageWeight[] | undefined>([]);
 const chartData = ref<any[]>([]);
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
   weeks.value = weightsStore.allWeeks;
   weeks.value.sort((a, b) => {
-    return a.weekStartDate - b.weekStartDate;
+    return +a.weekStartDate - +b.weekStartDate;
   });
 })
 
