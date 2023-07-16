@@ -79,7 +79,3 @@ const handleSignOut = () => {
     </DisclosurePanel>
   </Disclosure>
 </template>
-
-<style scoped>
-
-</style>

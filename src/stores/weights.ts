@@ -1,6 +1,5 @@
-import {computed, ref} from 'vue'
+import {ref} from 'vue'
 import {defineStore} from 'pinia'
-import {User} from "firebase/auth";
 import {getFirestore} from "firebase/firestore";
 import {doc, getDoc} from '@firebase/firestore';
 
