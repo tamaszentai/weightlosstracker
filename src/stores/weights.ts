@@ -1,4 +1,4 @@
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import {defineStore} from 'pinia'
 import {getFirestore} from "firebase/firestore";
 import {collection, getDocs} from '@firebase/firestore';
@@ -26,11 +26,16 @@ export const useWeightsStore = defineStore('weights', () => {
     isFetched.value = false;
   }
 
+  const lastWeek = computed(() => {
+    return allWeeks.value[allWeeks.value.length - 1];
+  })
+
 
   return {
     currentWeek,
     allWeeks,
     fetchWeights,
     reset,
+    lastWeek,
   }
 })

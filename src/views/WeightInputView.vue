@@ -1,15 +1,33 @@
 <script setup>
-import {computed, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
+import {useWeightsStore} from "@/stores/weights";
+import {useAuthStore} from "@/stores/auth";
+import {storeToRefs} from "pinia";
 
+const weightsStore = useWeightsStore();
+const authStore = useAuthStore();
+const {currentUser} = storeToRefs(authStore);
 const weekdaysData = ref([0, 0, 0, 0, 0, 0, 0]);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const weekdaysInJavaScriptOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const today = new Date();
-const todayName = new Date().getDay();
-const year = today.getFullYear();
-const firstDay = new Date(year, 0, 1);
+const todayIndex = new Date().getDay();
+const currentYear = today.getFullYear();
+const firstDay = new Date(currentYear, 0, 1);
 const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 nap
-const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+const currentWeekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+
+onMounted(async () => {
+  await weightsStore.fetchWeights(currentUser.value?.uid);
+  if (!weightsStore.lastWeek) return;
+  if (currentYear >= weightsStore.lastWeek.year) {
+    if (currentWeekNumber > weightsStore.lastWeek.weekNumber || currentYear > weightsStore.lastWeek.year) {
+      // Do nothing
+    } else {
+      weekdaysData.value = weightsStore.lastWeek.days.map((day) => day.weight);
+    }
+  }
+})
 
 
 const calcWeeklyAverage = computed(() => {
@@ -22,7 +40,7 @@ const calcWeeklyAverage = computed(() => {
 })
 
 const dayName = computed(() => {
-  return weekdaysInJavaScriptOrder[todayName];
+  return weekdaysInJavaScriptOrder[todayIndex];
 })
 
 const submitData = () => {
@@ -34,7 +52,7 @@ const submitData = () => {
   <div class="flex min-h-full flex-1 flex-col justify-center px-6  lg:px-8">
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Weekly weight input</h2>
-      <h4 class="text-center text-l font-bold leading-9 tracking-tight text-gray-900">Week {{ weekNumber }}, {{year}}</h4>
+      <h4 class="text-center text-l font-bold leading-9 tracking-tight text-gray-900">Week {{ currentWeekNumber }}, {{currentYear}}</h4>
     </div>
 
     <div class="mt-10 sm:w-full sm:max-w-sm">
