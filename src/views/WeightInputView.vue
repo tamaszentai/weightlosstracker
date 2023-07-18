@@ -14,17 +14,17 @@ const today = new Date();
 const todayIndex = new Date().getDay();
 const currentYear = today.getFullYear();
 const firstDay = new Date(currentYear, 0, 1);
-const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 nap
+const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 day
 const currentWeekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
-  if (!weightsStore.lastWeek) return;
-  if (currentYear >= weightsStore.lastWeek.year) {
-    if (currentWeekNumber > weightsStore.lastWeek.weekNumber || currentYear > weightsStore.lastWeek.year) {
+  if (!weightsStore.previousWeek) return;
+  if (currentYear >= weightsStore.previousWeek.year) {
+    if (currentWeekNumber > weightsStore.previousWeek.weekNumber || currentYear > weightsStore.previousWeek.year) {
       // Do nothing
     } else {
-      weekdaysData.value = weightsStore.lastWeek.days.map((day) => day.weight);
+      weekdaysData.value = weightsStore.previousWeek.days.map((day) => day.weight);
     }
   }
 })
@@ -70,7 +70,7 @@ const submitData = () => {
 
         <div>
           <button type="submit"
-                  class="flex w-full justify-center rounded-md bg-green-500 text-black px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-300">
+                  class="flex w-full mb-6 justify-center rounded-md bg-green-500 text-black px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-green-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-300">
             Submit
           </button>
         </div>

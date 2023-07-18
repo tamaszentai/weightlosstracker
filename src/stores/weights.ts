@@ -1,15 +1,23 @@
 import {computed, ref} from 'vue'
-import {defineStore} from 'pinia'
+import {defineStore, storeToRefs} from 'pinia'
 import {getFirestore} from "firebase/firestore";
 import {collection, getDocs, setDoc, updateDoc, doc} from '@firebase/firestore';
 import {IWeek} from "../interfaces/IWeek";
 import {week1, week2, week3} from "@/assets/backup";
+import {useAuthStore} from "@/stores/auth";
 
 export const useWeightsStore = defineStore('weights', () => {
   const db = getFirestore();
-  const currentWeek = ref(null);
   const allWeeks = ref<IWeek []>([]);
   const isFetched = ref(false);
+  const authStore = useAuthStore();
+  const {currentUser} = storeToRefs(authStore);
+  const today = new Date();
+  const todayIndex = new Date().getDay();
+  const currentYear = today.getFullYear();
+  const firstDay = new Date(currentYear, 0, 1);
+  const pastDays = (+today - +firstDay) / 86400000; // 86400000 ms = 1 day
+  const currentWeekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 
 
   const fetchWeights = async (userId: string): Promise<void> => {
@@ -22,30 +30,34 @@ export const useWeightsStore = defineStore('weights', () => {
   }
 
   const reset = () => {
-    currentWeek.value = null;
     allWeeks.value = [];
     isFetched.value = false;
   }
 
-  const lastWeek = computed(() => {
+  // TODO modify this to get the previous week always. Value.length - 1 is not always the previous week
+  const previousWeek = computed(() => {
     return allWeeks.value[allWeeks.value.length - 1];
   })
 
+  const uploadWeek = async (week: IWeek, userId: string) => {
+    await setDoc(doc(db, `${userId}`, `${week.year}-${week.weekNumber}`), week);
+  }
+
   // backup functionality
-  // const uploadBackup = async () => {
-  //   await setDoc(doc(db, 'userId', `${week3.year}-${week3.weekNumber}`), week3);
-  // }
-
-
-
-
+  const uploadBackup = async () => {
+    const weeks = [week1, week2, week3];
+    for (const week of weeks) {
+      await setDoc(doc(db, `${currentUser.value?.uid}`, `${week.year}-${week.weekNumber}`), week);
+    }
+  }
 
 
   return {
-    currentWeek,
     allWeeks,
     fetchWeights,
     reset,
-    lastWeek,
+    previousWeek,
+    uploadWeek,
+    uploadBackup,
   }
 })
