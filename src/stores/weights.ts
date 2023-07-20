@@ -34,12 +34,22 @@ export const useWeightsStore = defineStore('weights', () => {
         isFetched.value = false;
     }
 
-    // TODO update: this should work but it needs to be tested with vitest
-    const previousWeek = computed(() => {
-        return allWeeks.value.find((week) => currentYear >= week.year && (currentWeekNumber - 1 === week.weekNumber || currentWeekNumber < week.weekNumber));
-    })
+    const previousWeek = computed(() => allWeeks.value.find((week) => {
+        if (currentYear === week.year) {
+            return currentWeekNumber - 1 === week.weekNumber;
+        } else if (currentYear > week.year && currentWeekNumber === 1) {
+            return week.weekNumber === 52;
+        }
+    }));
 
-    const uploadWeek = async (week: IWeek, userId: string) => {
+    const currentWeek = computed(() => allWeeks.value.find((week) => {
+        if (currentYear === week.year) {
+            return currentWeekNumber === week.weekNumber;
+        }
+    }));
+
+    const addWeek = async (week: IWeek, userId: string) => {
+
         await setDoc(doc(db, `${userId}`, `${week.year}-${week.weekNumber}`), week);
     }
 
@@ -57,7 +67,8 @@ export const useWeightsStore = defineStore('weights', () => {
         fetchWeights,
         reset,
         previousWeek,
-        uploadWeek,
+        currentWeek,
+        addWeek,
         uploadBackup,
     }
 })
