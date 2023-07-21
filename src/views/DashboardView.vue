@@ -42,16 +42,25 @@ watch(weeks, (newWeeks) => {
   }
 });
 
+const countNonZeroWeightObjects = (days) => {
+  let count = 0;
+  for (const day of days) {
+    if (day.hasOwnProperty('weight') && day.weight !== 0) {
+      count++;
+    }
+  }
+  return count < 7 ? count : 7;
+}
+
 const calculateAverageWeight = () => {
   const averageWeights = [];
   for (const week of weeks.value) {
     if (!week.days) return;
-    let addedDays = week.days.length;
     let totalWeight = 0;
     for (const day of week.days) {
       totalWeight += day.weight;
     }
-    const averageWeight = totalWeight / addedDays;
+    const averageWeight = totalWeight / countNonZeroWeightObjects(week.days);
     averageWeights.push({weekNumber: `${week.year}-Week ${week.weekNumber}`, averageWeight: +averageWeight.toFixed(1)});
   }
   return averageWeights;
