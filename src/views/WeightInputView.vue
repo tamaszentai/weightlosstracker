@@ -19,6 +19,8 @@ const currentWeekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 const currentWeek = ref(weightsStore.currentWeek);
 const previousWeek = ref(weightsStore.previousWeek);
 
+console.log(todayIndex)
+
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
   if (!weightsStore.previousWeek) return;
@@ -95,9 +97,16 @@ const submitData = () => {
         <div v-for="(day, index) in weekdaysData" :key="index" class="flex items-center justify-between ">
           <label for="day" class="block text-sm font-medium leading-6 text-gray-900">{{ weekdayLabels[index] }}</label>
           <div class="mt-2">
-            <input type="number" v-model="weekdaysData[index]" id="day" name="day" step=".1"
+            <input v-if="weekdaysData[index] !== 0" type="number" v-model="weekdaysData[index]" id="day" name="day"
+                   step=".1"
                    :disabled="weekdayLabels[index] !== dayName"
                    :class="weekdayLabels[index] !== dayName ? 'cursor-not-allowed' : ''"
+                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6 disabled:bg-gray-200 disabled:text-gray-500"/>
+
+            <input v-else type="text" id="day" name="day" step=".1"
+                   :disabled="weekdayLabels[index] !== dayName"
+                   :class="weekdayLabels[index] !== dayName ? 'cursor-not-allowed' : ''"
+                   value="N/A"
                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6 disabled:bg-gray-200 disabled:text-gray-500"/>
           </div>
         </div>
