@@ -1,4 +1,4 @@
 export interface IDay {
     date: Date,
-    weight: number,
+    weight: number
 }

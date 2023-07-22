@@ -11,7 +11,6 @@ const password = ref("");
 const register = async () => {
   try {
     await createUserWithEmailAndPassword(getAuth(), email.value, password.value)
-    console.log("User created")
     router.push("/dashboard")
 
   } catch (error) {

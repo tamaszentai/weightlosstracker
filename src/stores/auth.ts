@@ -9,7 +9,6 @@ export const useAuthStore = defineStore('auth', () => {
 
     const login = async (user: any) => {
         currentUser.value = (await signInWithEmailAndPassword(getAuth(), user.email, user.password)).user;
-        console.log("User logged in")
         await router.push("/dashboard")
     }
 

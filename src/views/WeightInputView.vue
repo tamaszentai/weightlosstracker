@@ -8,17 +8,16 @@ import moment from "moment/moment";
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);
-const weekdaysData = ref([0, 0, 0, 0, 0, 0, 0]);
+const weekdaysData = ref(['', '', '', '', '', '', '']);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const weekdaysInJavaScriptOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const today = moment();
+const weekStartDate = today.clone().startOf('isoweek').toDate();
+const weekEndDate = today.clone().endOf('isoWeek').toDate();
 const currentWeekNumber = today.week();
 const currentYear = today.year();
 const todayIndex = new Date().getDay();
 const todayName = today.format('dddd');
-const currentWeek = ref(weightsStore.currentWeek);
-const previousWeek = ref(weightsStore.previousWeek);
-
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
@@ -26,8 +25,6 @@ onMounted(async () => {
   if (currentYear >= weightsStore.previousWeek.year) {
     if (currentWeekNumber > weightsStore.previousWeek.weekNumber || currentYear > weightsStore.previousWeek.year) {
       weekdaysData.value = weightsStore.currentWeek.days.map((day) => day.weight);
-    } else {
-      weekdaysData.value = weightsStore.previousWeek.days.map((day) => day.weight);
     }
   }
 })
@@ -54,18 +51,12 @@ const createWeek = () => {
   });
 }
 
-console.log(weekdaysInJavaScriptOrder[todayIndex])
-console.log(todayName)
-console.log(weekdayLabels[todayIndex] )
-
 
 const submitData = () => {
-  if (!currentWeek.value) {
     const payload = {
       days: [...createWeek()]
     }
     weightsStore.addWeek(payload, currentUser.value?.uid)
-  }
 }
 
 </script>
@@ -80,15 +71,11 @@ const submitData = () => {
 
     <div class="mt-10 sm:w-full sm:max-w-sm">
       <form class="space-y-6" @submit.prevent="submitData">
-        <div v-for="(day, index) in weekdaysData" :key="index" class="flex items-center justify-between ">
+        <div v-for="(day, index) in weekdaysData" :key="index" class="flex items-center justify-between">
           <label for="day" class="block text-sm font-medium leading-6 text-gray-900">{{ weekdayLabels[index] }}</label>
           <div class="mt-2">
-            <input v-if="weekdaysData[index] !== 0" type="number" v-model="weekdaysData[index]" id="day" name="day"
+            <input type="number" v-model="weekdaysData[index]" id="day" name="day" :placeholder="weekdaysData[index] === '-' ? 'not available' : ''"
                    step=".1"
-                   class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6 disabled:bg-gray-200 disabled:text-gray-500"/>
-
-            <input v-else type="text" id="day" name="day" step=".1"
-                   value="N/A"
                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6 disabled:bg-gray-200 disabled:text-gray-500"/>
           </div>
         </div>

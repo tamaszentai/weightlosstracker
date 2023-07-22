@@ -34,11 +34,9 @@ export const useWeightsStore = defineStore('weights', () => {
         isFetched.value = false;
     }
 
+
     const previousWeek = computed(() => allWeeks.value.find((week) => {
         if (currentYear === week.year) {
-            console.log({currentYear})
-            console.log({weekNumber: week.weekNumber})
-            console.log({currentWeekNumber})
             return currentWeekNumber - 1 === week.weekNumber;
         } else if (currentYear > week.year && currentWeekNumber === 1) {
             return week.weekNumber === 52;
@@ -60,8 +58,8 @@ export const useWeightsStore = defineStore('weights', () => {
             days: [...days]
         }
 
-        console.log(week);
         await setDoc(doc(db, `${userId}`, `${currentYear}-${currentWeekNumber}`), week);
+        reset();
     }
 
     // backup functionality

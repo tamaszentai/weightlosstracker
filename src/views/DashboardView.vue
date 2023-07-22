@@ -13,11 +13,6 @@ interface IAverageWeight {
 
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
-const today = new Date();
-const year = today.getFullYear();
-const firstDay = new Date(year, 0, 1);
-const pastDays = (+today - +firstDay) / 86400000; // 86400000 ms = 1 day
-const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
 const {currentUser} = storeToRefs(authStore);
 const weeks = ref<IWeek[]>([]);
 const averageWeights = ref<IAverageWeight[] | undefined>([]);
@@ -31,8 +26,8 @@ onMounted(async () => {
   });
 })
 
-watch(weeks, (newWeeks) => {
-  if (newWeeks) {
+watch(weeks, (newWeeksValue) => {
+  if (newWeeksValue) {
   averageWeights.value = calculateAverageWeight();
   if (!averageWeights.value) return;
     chartData.value = [
@@ -45,7 +40,7 @@ watch(weeks, (newWeeks) => {
 const countNonZeroWeightObjects = (days) => {
   let count = 0;
   for (const day of days) {
-    if (day.hasOwnProperty('weight') && day.weight !== 0) {
+    if (day.hasOwnProperty('weight') && day.weight !== "") {
       count++;
     }
   }
@@ -58,7 +53,7 @@ const calculateAverageWeight = () => {
     if (!week.days) return;
     let totalWeight = 0;
     for (const day of week.days) {
-      totalWeight += day.weight;
+      totalWeight += (day.weight === "" ? 0 : day.weight)
     }
     const averageWeight = totalWeight / countNonZeroWeightObjects(week.days);
     averageWeights.push({weekNumber: `${week.year}-Week ${week.weekNumber}`, averageWeight: +averageWeight.toFixed(1)});
