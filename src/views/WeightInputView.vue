@@ -3,6 +3,7 @@ import {computed, onMounted, ref} from 'vue';
 import {useWeightsStore} from "@/stores/weights";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
+import moment from "moment/moment";
 
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
@@ -10,16 +11,14 @@ const {currentUser} = storeToRefs(authStore);
 const weekdaysData = ref([0, 0, 0, 0, 0, 0, 0]);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const weekdaysInJavaScriptOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-const today = new Date();
+const today = moment();
+const currentWeekNumber = today.week();
+const currentYear = today.year();
 const todayIndex = new Date().getDay();
-const currentYear = today.getFullYear();
-const firstDay = new Date(currentYear, 0, 1);
-const pastDays = (today - firstDay) / 86400000; // 86400000 ms = 1 day
-const currentWeekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+const todayName = today.format('dddd');
 const currentWeek = ref(weightsStore.currentWeek);
 const previousWeek = ref(weightsStore.previousWeek);
 
-console.log(todayIndex)
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
@@ -47,40 +46,27 @@ const dayName = computed(() => {
   return weekdaysInJavaScriptOrder[todayIndex];
 })
 
-const getMondayAndSundayOfCurrentWeek = () => {
-  const dayOfWeek = today.getDay();
-  const monday = new Date(today);
-  monday.setDate(today.getDate() - (dayOfWeek === 0 ? 6 : dayOfWeek - 1));
-  const sunday = new Date(today);
-  sunday.setDate(today.getDate() + (dayOfWeek === 0 ? 0 : 7 - dayOfWeek));
-
-  return {monday, sunday};
-}
-
 const createWeek = () => {
   return weekdaysData.value.map((weight) => {
     return {
-      date: today, weight
+      date: today.toDate(), weight
     }
   });
 }
 
+console.log(weekdaysInJavaScriptOrder[todayIndex])
+console.log(todayName)
+console.log(weekdayLabels[todayIndex] )
 
-// TODO this function needs to be tested
+
 const submitData = () => {
-  const {monday, sunday} = getMondayAndSundayOfCurrentWeek();
   if (!currentWeek.value) {
-    const week = {
-      weekStartDate: monday,
-      weekEndDate: sunday,
-      year: currentYear,
-      weekNumber: currentWeekNumber,
+    const payload = {
       days: [...createWeek()]
     }
-    weightsStore.addWeek(week, currentUser.value?.uid)
+    weightsStore.addWeek(payload, currentUser.value?.uid)
   }
 }
-
 
 </script>
 
@@ -99,13 +85,9 @@ const submitData = () => {
           <div class="mt-2">
             <input v-if="weekdaysData[index] !== 0" type="number" v-model="weekdaysData[index]" id="day" name="day"
                    step=".1"
-                   :disabled="weekdayLabels[index] !== dayName"
-                   :class="weekdayLabels[index] !== dayName ? 'cursor-not-allowed' : ''"
                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6 disabled:bg-gray-200 disabled:text-gray-500"/>
 
             <input v-else type="text" id="day" name="day" step=".1"
-                   :disabled="weekdayLabels[index] !== dayName"
-                   :class="weekdayLabels[index] !== dayName ? 'cursor-not-allowed' : ''"
                    value="N/A"
                    class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6 disabled:bg-gray-200 disabled:text-gray-500"/>
           </div>

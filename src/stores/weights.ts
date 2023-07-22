@@ -5,6 +5,7 @@ import {collection, doc, getDocs, setDoc} from '@firebase/firestore';
 import {IWeek} from "../interfaces/IWeek";
 import {week1, week2, week3, week4} from "@/assets/backup";
 import {useAuthStore} from "@/stores/auth";
+import moment from "moment";
 
 export const useWeightsStore = defineStore('weights', () => {
     const db = getFirestore();
@@ -12,12 +13,11 @@ export const useWeightsStore = defineStore('weights', () => {
     const isFetched = ref(false);
     const authStore = useAuthStore();
     const {currentUser} = storeToRefs(authStore);
-    const today = new Date();
-    const todayIndex = new Date().getDay();
-    const currentYear = today.getFullYear();
-    const firstDay = new Date(currentYear, 0, 1);
-    const pastDays = (+today - +firstDay) / 86400000; // 86400000 ms = 1 day
-    const currentWeekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+    const today = moment();
+    const weekStartDate = today.clone().startOf('isoweek').toDate();
+    const weekEndDate = today.clone().endOf('isoWeek').toDate();
+    const currentWeekNumber = today.week();
+    const currentYear = today.year();
 
 
     const fetchWeights = async (userId: string): Promise<void> => {
@@ -36,6 +36,9 @@ export const useWeightsStore = defineStore('weights', () => {
 
     const previousWeek = computed(() => allWeeks.value.find((week) => {
         if (currentYear === week.year) {
+            console.log({currentYear})
+            console.log({weekNumber: week.weekNumber})
+            console.log({currentWeekNumber})
             return currentWeekNumber - 1 === week.weekNumber;
         } else if (currentYear > week.year && currentWeekNumber === 1) {
             return week.weekNumber === 52;
@@ -48,9 +51,17 @@ export const useWeightsStore = defineStore('weights', () => {
         }
     }));
 
-    const addWeek = async (week: IWeek, userId: string) => {
+    const addWeek = async ({days}: any, userId: string) => {
+        const week = {
+            weekStartDate,
+            weekEndDate,
+            year: currentYear,
+            weekNumber: currentWeekNumber,
+            days: [...days]
+        }
 
-        await setDoc(doc(db, `${userId}`, `${week.year}-${week.weekNumber}`), week);
+        console.log(week);
+        await setDoc(doc(db, `${userId}`, `${currentYear}-${currentWeekNumber}`), week);
     }
 
     // backup functionality
