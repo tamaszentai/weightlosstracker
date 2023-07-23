@@ -1,5 +1,5 @@
 <script setup>
-import {computed, onMounted, ref} from 'vue';
+import {onMounted, ref} from 'vue';
 import {useWeightsStore} from "@/stores/weights";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
@@ -10,14 +10,12 @@ const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);
 const weekdaysData = ref(['', '', '', '', '', '', '']);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const weekdaysInJavaScriptOrder = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 const today = moment();
-const weekStartDate = today.clone().startOf('isoweek').toDate();
-const weekEndDate = today.clone().endOf('isoWeek').toDate();
-const currentWeekNumber = today.week();
+const weekStartDate = today.clone().startOf('isoweek')
+const weekEndDate = today.clone().endOf('isoWeek')
+const currentWeekNumber = Number(today.format('W'));
 const currentYear = today.year();
-const todayIndex = new Date().getDay();
-const todayName = today.format('dddd');
+
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
@@ -30,23 +28,11 @@ onMounted(async () => {
 })
 
 
-const calcWeeklyAverage = computed(() => {
-  let average = 0;
-  if (weekdaysData.value.every((day) => day > 0)) {
-    const sum = weekdaysData.value.reduce((a, b) => a + b, 0);
-    average = (sum / weekdaysData.value.length).toFixed(1);
-  }
-  return average
-})
-
-const dayName = computed(() => {
-  return weekdaysInJavaScriptOrder[todayIndex];
-})
-
 const createWeek = () => {
-  return weekdaysData.value.map((weight) => {
+  return weekdaysData.value.map((weight, index) => {
+    const iteratorDate = weekStartDate.clone().add(index, 'days')
     return {
-      date: today.toDate(), weight
+      date: iteratorDate.toDate(), weight
     }
   });
 }

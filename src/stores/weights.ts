@@ -16,7 +16,7 @@ export const useWeightsStore = defineStore('weights', () => {
     const today = moment();
     const weekStartDate = today.clone().startOf('isoweek').toDate();
     const weekEndDate = today.clone().endOf('isoWeek').toDate();
-    const currentWeekNumber = today.week();
+    const currentWeekNumber = Number(today.format('W'));
     const currentYear = today.year();
 
 

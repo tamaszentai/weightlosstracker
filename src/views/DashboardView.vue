@@ -37,7 +37,7 @@ watch(weeks, (newWeeksValue) => {
   }
 });
 
-const countNonZeroWeightObjects = (days) => {
+const countNonStringWeightObjects = (days) => {
   let count = 0;
   for (const day of days) {
     if (day.hasOwnProperty('weight') && day.weight !== "") {
@@ -55,7 +55,7 @@ const calculateAverageWeight = () => {
     for (const day of week.days) {
       totalWeight += (day.weight === "" ? 0 : day.weight)
     }
-    const averageWeight = totalWeight / countNonZeroWeightObjects(week.days);
+    const averageWeight = totalWeight / countNonStringWeightObjects(week.days);
     averageWeights.push({weekNumber: `${week.year}-Week ${week.weekNumber}`, averageWeight: +averageWeight.toFixed(1)});
   }
   return averageWeights;
