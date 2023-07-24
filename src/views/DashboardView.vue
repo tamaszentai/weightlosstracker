@@ -6,16 +6,11 @@ import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
 import type {IWeek} from "@/interfaces/IWeek";
 
-interface IAverageWeight {
-  weekNumber: string;
-  averageWeight: number;
-}
 
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);
 const weeks = ref<IWeek[]>([]);
-const averageWeights = ref<IAverageWeight[] | undefined>([]);
 const chartData = ref<any[]>([]);
 
 onMounted(async () => {
@@ -28,39 +23,12 @@ onMounted(async () => {
 
 watch(weeks, (newWeeksValue) => {
   if (newWeeksValue) {
-  averageWeights.value = calculateAverageWeight();
-  if (!averageWeights.value) return;
     chartData.value = [
       ['Date', 'Weight'],
-      ...averageWeights.value.map((week) => [week.weekNumber, week.averageWeight]),
+      ...weeks.value.map((week) => [`${week.year}-Week ${week.weekNumber}`, week.weeklyAverage]),
     ];
   }
 });
-
-const countNonStringWeightObjects = (days) => {
-  let count = 0;
-  for (const day of days) {
-    if (day.hasOwnProperty('weight') && day.weight !== "") {
-      count++;
-    }
-  }
-  return count < 7 ? count : 7;
-}
-
-const calculateAverageWeight = () => {
-  const averageWeights = [];
-  for (const week of weeks.value) {
-    if (!week.days) return;
-    let totalWeight = 0;
-    for (const day of week.days) {
-      totalWeight += (day.weight === "" ? 0 : day.weight)
-    }
-    const averageWeight = totalWeight / countNonStringWeightObjects(week.days);
-    averageWeights.push({weekNumber: `${week.year}-Week ${week.weekNumber}`, averageWeight: +averageWeight.toFixed(1)});
-  }
-  return averageWeights;
-}
-
 
 const chartOptions = {
   chart: {

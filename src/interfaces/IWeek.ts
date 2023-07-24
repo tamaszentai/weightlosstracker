@@ -5,5 +5,6 @@ export interface IWeek {
     weekEndDate: Date,
     year: number,
     weekNumber: number,
+    weeklyAverage: number,
     days: IDay[]
 }

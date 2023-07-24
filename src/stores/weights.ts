@@ -14,7 +14,7 @@ export const useWeightsStore = defineStore('weights', () => {
     const authStore = useAuthStore();
     const {currentUser} = storeToRefs(authStore);
     const today = moment();
-    const weekStartDate = today.clone().startOf('isoweek').toDate();
+    const weekStartDate = today.clone().startOf('isoWeek').toDate();
     const weekEndDate = today.clone().endOf('isoWeek').toDate();
     const currentWeekNumber = Number(today.format('W'));
     const currentYear = today.year();
@@ -49,11 +49,25 @@ export const useWeightsStore = defineStore('weights', () => {
         }
     }));
 
+
+    const calculateAverageWeight = (days: [{ weight: number | string }]) => {
+        let numberValueCounter = 0
+        let totalWeight = 0;
+        for (const day of days) {
+            if (typeof day.weight === "string") continue
+            totalWeight += day.weight
+            numberValueCounter++
+        }
+        return (totalWeight / numberValueCounter).toFixed(1);
+    }
+
+
     const addWeek = async ({days}: any, userId: string) => {
         const week = {
             weekStartDate,
             weekEndDate,
             year: currentYear,
+            weeklyAverage: calculateAverageWeight([...days] as [{weight: number | string}]),
             weekNumber: currentWeekNumber,
             days: [...days]
         }
