@@ -3,18 +3,19 @@ import {onMounted, ref} from 'vue';
 import {useWeightsStore} from "@/stores/weights";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
-import moment from "moment/moment";
+import { DateTime } from "luxon";
+
 
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);
 const weekdaysData = ref(['', '', '', '', '', '', '']);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const today = moment();
-const weekStartDate = today.clone().startOf('isoWeek')
-const weekEndDate = today.clone().endOf('isoWeek')
-const currentWeekNumber = Number(today.format('W'));
-const currentYear = today.year();
+const today = DateTime.now();
+const weekStartDate = today.startOf('week').toISODate();
+const weekEndDate = today.endOf('week').toISODate();
+const currentWeekNumber = today.weekNumber
+const currentYear = today.year
 
 
 onMounted(async () => {
@@ -30,9 +31,9 @@ onMounted(async () => {
 
 const createWeek = () => {
   return weekdaysData.value.map((weight, index) => {
-    const iteratorDate = weekStartDate.clone().add(index, 'days')
+    const iteratorDate = today.startOf('week').plus({days: index})
     return {
-      date: iteratorDate.toDate(), weight
+      date: iteratorDate.toISODate(), weight
     }
   });
 }

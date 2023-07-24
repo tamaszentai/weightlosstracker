@@ -5,7 +5,7 @@ import {collection, doc, getDocs, setDoc} from '@firebase/firestore';
 import {IWeek} from "../interfaces/IWeek";
 import {week1, week2, week3, week4} from "@/assets/backup";
 import {useAuthStore} from "@/stores/auth";
-import moment from "moment";
+import { DateTime } from "luxon";
 
 export const useWeightsStore = defineStore('weights', () => {
     const db = getFirestore();
@@ -13,11 +13,11 @@ export const useWeightsStore = defineStore('weights', () => {
     const isFetched = ref(false);
     const authStore = useAuthStore();
     const {currentUser} = storeToRefs(authStore);
-    const today = moment();
-    const weekStartDate = today.clone().startOf('isoWeek').toDate();
-    const weekEndDate = today.clone().endOf('isoWeek').toDate();
-    const currentWeekNumber = Number(today.format('W'));
-    const currentYear = today.year();
+    const today = DateTime.now();
+    const weekStartDate = today.startOf('week').toISODate();
+    const weekEndDate = today.endOf('week').toISODate();
+    const currentWeekNumber = today.weekNumber
+    const currentYear = today.year
 
 
     const fetchWeights = async (userId: string): Promise<void> => {
