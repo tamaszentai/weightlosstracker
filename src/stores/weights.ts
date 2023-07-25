@@ -14,8 +14,8 @@ export const useWeightsStore = defineStore('weights', () => {
     const authStore = useAuthStore();
     const {currentUser} = storeToRefs(authStore);
     const today = DateTime.now();
-    const weekStartDate = today.startOf('week').toISODate();
-    const weekEndDate = today.endOf('week').toISODate();
+    const weekStartDate = today.startOf('week').toJSDate();
+    const weekEndDate = today.endOf('week').toJSDate();
     const currentWeekNumber = today.weekNumber
     const currentYear = today.year
 

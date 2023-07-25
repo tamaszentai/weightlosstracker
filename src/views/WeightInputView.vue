@@ -33,7 +33,7 @@ const createWeek = () => {
   return weekdaysData.value.map((weight, index) => {
     const iteratorDate = today.startOf('week').plus({days: index})
     return {
-      date: iteratorDate.toISODate(), weight
+      date: iteratorDate.toJSDate(), weight
     }
   });
 }

@@ -5,19 +5,25 @@ import {onMounted, ref, watch} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
 import type {IWeek} from "@/interfaces/IWeek";
+import WeekItem from "@/components/WeekItem.vue";
 
 
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);
 const weeks = ref<IWeek[]>([]);
+const reverseWeeks = ref<IWeek[]>([]);
 const chartData = ref<any[]>([]);
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
-  weeks.value = weightsStore.allWeeks;
+  weeks.value = [...weightsStore.allWeeks];
+  reverseWeeks.value = [...weightsStore.allWeeks];
   weeks.value.sort((a, b) => {
     return +a.weekStartDate - +b.weekStartDate;
+  });
+  reverseWeeks.value.sort((a, b) => {
+    return +b.weekNumber - +a.weekNumber;
   });
 })
 
@@ -52,5 +58,6 @@ const chartOptions = {
     <div v-else class="flex justify-center items-center h-64">
       <p class="text-gray-500">No data to display</p>
     </div>
+    <WeekItem v-for="week in reverseWeeks" :key="week.weekStartDate" :week-data="week"/>
   </div>
 </template>
