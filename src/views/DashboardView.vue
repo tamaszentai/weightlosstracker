@@ -58,6 +58,8 @@ const chartOptions = {
     <div v-else class="flex justify-center items-center h-64">
       <p class="text-gray-500">No data to display</p>
     </div>
+    <div class="mt-10">
     <WeekItem v-for="week in reverseWeeks" :key="week.weekStartDate" :week-data="week"/>
+    </div>
   </div>
 </template>

@@ -75,7 +75,7 @@ const submitData = () => {
           </button>
         </div>
       </form>
-      <button @click="weightsStore.uploadBackup">Backup</button>
+<!--      <button @click="weightsStore.uploadBackup">Backup</button>-->
     </div>
   </div>
 </template>
