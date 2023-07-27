@@ -1,7 +1,6 @@
 <script setup>
 import {ref} from "vue";
 import {ChevronDownIcon, ChevronUpIcon} from "@heroicons/vue/20/solid";
-import {defineProps} from "vue";
 
 const props = defineProps(["weekData"]);
 const isOpen = ref(false);
@@ -24,26 +23,43 @@ const weekToggle = () => {
         <p class="truncate text-sm text-gray-500">Weekly average: {{ weekData.weeklyAverage }}kg</p>
       </div>
     </div>
-    <transition name="expand">
+    <TransitionGroup name="expand">
       <div v-if="isOpen"
            class="expanded bg-green-200 rounded-b-xl border-b border-r border-l border-gray-300 shadow-md">
         <div class="p-4">
-          <p class="text-sm font-medium text-gray-900">Week start: {{ weekData.weekStartDate }}</p>
-          <p class="text-sm font-medium text-gray-900">Week end: {{ weekData.weekEndDate }}</p>
-          <div v-for="day in weekData.days" :key="day.date">
-            <p class="text-sm font-medium text-gray-900">Date: {{ day.date }}</p>
-            <p class="text-sm font-medium text-gray-900">Weight: {{ day.weight }}</p>
-          </div>
+          <p class="text-sm font-medium text-gray-900">Week start: <span
+              class="text-sm text-gray-500">{{ weekData.weekStartDate.toDate().toDateString() }}</span></p>
+          <p class="text-sm font-medium text-gray-900">Week end: <span
+              class="text-sm text-gray-500">{{ weekData.weekEndDate.toDate().toDateString() }}</span></p>
+          <br/>
+          <table class="min-w-full divide-y divide-gray-300">
+<!--            <thead class="bg-gray-50">-->
+<!--            <tr>-->
+<!--              <th class="font-medium text-gray-500">-->
+<!--                Day-->
+<!--              </th>-->
+<!--              <th class="font-medium text-gray-500">-->
+<!--                Weight-->
+<!--              </th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+            <tbody class="divide-y divide-gray-200">
+            <tr v-for="day in weekData.days" :key="day.date">
+              <td class="text-center"><span class="text-sm text-gray-500">{{ day.date.toDate().toDateString() }}</span></td>
+              <td v-if="typeof day.weight !== 'string'" class="text-center"><span class="text-sm text-gray-500">{{ day.weight }}kg</span></td>
+            </tr>
+            </tbody>
 
+          </table>
         </div>
       </div>
-    </transition>
+    </TransitionGroup>
   </div>
 </template>
 
 <style scoped>
 .expanded {
-  height: 600px;
+  height: 300px;
   overflow: hidden;
 }
 
