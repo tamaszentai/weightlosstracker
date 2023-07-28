@@ -5,7 +5,7 @@ import {collection, doc, getDocs, setDoc} from '@firebase/firestore';
 import {IWeek} from "../interfaces/IWeek";
 import {week1, week2, week3, week4} from "@/assets/backup";
 import {useAuthStore} from "@/stores/auth";
-import { DateTime } from "luxon";
+import {DateTime} from "luxon";
 
 export const useWeightsStore = defineStore('weights', () => {
     const db = getFirestore();
@@ -67,7 +67,7 @@ export const useWeightsStore = defineStore('weights', () => {
             weekStartDate,
             weekEndDate,
             year: currentYear,
-            weeklyAverage: calculateAverageWeight([...days] as [{weight: number | string}]),
+            weeklyAverage: calculateAverageWeight([...days] as [{ weight: number | string }]),
             weekNumber: currentWeekNumber,
             days: [...days]
         }

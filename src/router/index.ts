@@ -19,7 +19,7 @@ const router = createRouter({
             name: 'login',
             component: LoginView,
             beforeEnter: async (to, from, next) => {
-                if ( await getCurrentUser()) {
+                if (await getCurrentUser()) {
                     next('/dashboard')
                 } else {
                     next()
@@ -76,7 +76,7 @@ const getCurrentUser = () => {
 }
 
 router.beforeEach(async (to, from, next) => {
-    if(to.matched.some(record => record.meta.requiresAuth)) {
+    if (to.matched.some(record => record.meta.requiresAuth)) {
         if (await getCurrentUser()) {
             next();
         } else {

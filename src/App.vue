@@ -14,17 +14,30 @@ const isLoggedIn = ref(false);
 
 let auth;
 onMounted(() => {
-  auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    isLoggedIn.value = !!user;
-  });
+    auth = getAuth();
+    onAuthStateChanged(auth, (user) => {
+        isLoggedIn.value = !!user;
+    });
 })
 
 </script>
 <template>
-  <nav-bar v-if="isLoggedIn"/>
-  <RouterView/>
+    <nav-bar v-if="isLoggedIn"/>
+    <Transition>
+
+        <RouterView/>
+    </Transition>
 </template>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+
 </style>
