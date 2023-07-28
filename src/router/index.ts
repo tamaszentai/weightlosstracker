@@ -10,6 +10,8 @@ import RegisterView from "@/views/RegisterView.vue";
 import DashboardView from "@/views/DashboardView.vue";
 // @ts-ignore
 import ProfileView from "@/views/ProfileView.vue";
+// @ts-ignore
+import ForgotPassword from "@/views/ForgotPassword.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +32,11 @@ const router = createRouter({
             path: '/register',
             name: 'register',
             component: RegisterView
+        },
+        {
+            path: '/forgot-password',
+            name: 'forgot-password',
+            component: ForgotPassword
         },
         {
             path: '/dashboard',

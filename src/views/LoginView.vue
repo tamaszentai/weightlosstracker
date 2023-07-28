@@ -61,7 +61,7 @@ const login = async () => {
                     <div class="flex items-center justify-between">
                         <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                         <div class="text-sm">
-                            <a href="#" class="font-semibold text-green-500 hover:text-black">Forgot password?</a>
+                          <RouterLink to="/forgot-password" class="font-semibold text-green-500 hover:text-black">Forgot password?</RouterLink>
                         </div>
                     </div>
                     <div class="mt-2">
