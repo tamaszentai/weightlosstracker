@@ -24,7 +24,6 @@ onMounted(() => {
 <template>
     <nav-bar v-if="isLoggedIn"/>
     <Transition>
-
         <RouterView/>
     </Transition>
 </template>
