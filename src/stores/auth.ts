@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import {ref} from "vue";
-import {getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail} from "firebase/auth";
+import {getAuth, onAuthStateChanged, signInWithEmailAndPassword, sendPasswordResetEmail, updatePassword} from "firebase/auth";
 import router from "../router";
 
 export const useAuthStore = defineStore('auth', () => {
@@ -30,11 +30,23 @@ export const useAuthStore = defineStore('auth', () => {
                 });
         }
 
+        const changePassword = async (newPassword: string) => {
+            if (auth.currentUser) {
+                await updatePassword(auth.currentUser, newPassword).then(() => {
+                    // Update successful.
+                }).catch((error) => {
+                    // An error ocurred
+                    // ...
+                });
+            }
+        }
+
 
         return {
             currentUser,
             login,
-            resetPassword
+            resetPassword,
+            changePassword
         }
     })
 ;
