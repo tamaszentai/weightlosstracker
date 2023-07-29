@@ -2,6 +2,12 @@
 import oldScale from "@/assets/old-scale.png";
 import {ref} from "vue";
 import {useAuthStore} from "@/stores/auth";
+import { toast, type ToastOptions } from 'vue3-toastify';
+
+enum responseTypes {
+  success = 'success',
+  error = 'error'
+}
 
 const email = ref("");
 const authStore = useAuthStore();
@@ -9,11 +15,24 @@ const authStore = useAuthStore();
 const resetPassword = async () => {
   try {
     await authStore.resetPassword(email.value);
+    notify(responseTypes.success)
     email.value = "";
   } catch (error) {
-    console.log(error);
+    notify(responseTypes.error)
   }
 }
+
+const notify = (type: string) => {
+  switch (type) {
+    case 'success':
+      toast.success('The email has been sent!',{position: 'top-right', transition: "flip", autoClose: 2000});
+      break;
+    case 'error':
+      toast.error('Something went wrong, try again!',{position: 'top-right', transition: "flip", autoClose: 2000});
+      break;
+  }
+}
+
 </script>
 
 <template>

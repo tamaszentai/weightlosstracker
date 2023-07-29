@@ -18,27 +18,13 @@ export const useAuthStore = defineStore('auth', () => {
 
 
         const resetPassword = async (email: string) => {
-            await sendPasswordResetEmail(auth, email)
-                .then(() => {
-                    // Password reset email sent!
-                    // ..
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    // ..
-                });
+            await sendPasswordResetEmail(auth, email);
         }
 
         const changePassword = async (newPassword: string) => {
             if (auth.currentUser) {
-                await updatePassword(auth.currentUser, newPassword).then(() => {
-                    // Update successful.
-                }).catch((error) => {
-                    // An error ocurred
-                    // ...
-                });
-            }
+                    await updatePassword(auth.currentUser, newPassword)
+             }
         }
 
 

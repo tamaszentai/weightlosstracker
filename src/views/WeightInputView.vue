@@ -1,9 +1,14 @@
-<script setup>
+<script setup lang="ts">
 import {onMounted, ref} from 'vue';
 import {useWeightsStore} from "@/stores/weights";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
-import {DateTime} from "luxon";
+import {DateTime} from "luxon";import { toast, type ToastOptions } from 'vue3-toastify';
+
+enum responseTypes {
+  success = 'success',
+  error = 'error'
+}
 
 
 const weightsStore = useWeightsStore();
@@ -18,14 +23,17 @@ const currentYear = today.year
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
-  if (!weightsStore.previousWeek) return;
+  if (!weightsStore.previousWeek) {
+    weekdaysData.value = weightsStore.currentWeek.days.map((day) => day.weight);
+    return;
+  }
+
   if (currentYear >= weightsStore.previousWeek.year) {
     if (currentWeekNumber > weightsStore.previousWeek.weekNumber || currentYear > weightsStore.previousWeek.year) {
       weekdaysData.value = weightsStore.currentWeek.days.map((day) => day.weight);
     }
   }
 })
-
 
 const createWeek = () => {
   return weekdaysData.value.map((weight, index) => {
@@ -37,12 +45,30 @@ const createWeek = () => {
 }
 
 
-const submitData = () => {
+const submitData =  async () => {
   const payload = {
     days: [...createWeek()]
   }
-  weightsStore.addWeek(payload, currentUser.value?.uid)
+  try {
+    await weightsStore.addWeek(payload, currentUser.value?.uid)
+    notify(responseTypes.success)
+  } catch (error) {
+    notify(responseTypes.error)
+  }
 }
+
+const notify = (type: string) => {
+  switch (type) {
+    case 'success':
+      toast.success('Submitted successfully!',{position: 'top-right', transition: "flip", autoClose: 2000});
+      break;
+    case 'error':
+      toast.error('Something went wrong, try again!',{position: 'top-right', transition: "flip", autoClose: 2000});
+      break;
+  }
+}
+
+
 
 </script>
 

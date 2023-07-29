@@ -42,7 +42,6 @@ const changePassword = async () => {
     newPasswordConfirm.value = "";
     notify(responseTypes.success);
   } catch (e) {
-    console.log(e);
     notify(responseTypes.error)
   }
 }
