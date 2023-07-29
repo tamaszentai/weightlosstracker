@@ -58,7 +58,7 @@ export const useWeightsStore = defineStore('weights', () => {
             totalWeight += day.weight
             numberValueCounter++
         }
-        return (totalWeight / numberValueCounter).toFixed(1);
+        return Number((totalWeight / numberValueCounter).toFixed(1));
     }
 
 
