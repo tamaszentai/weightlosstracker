@@ -4,6 +4,9 @@ import './style.css';
 import App from './App.vue'
 import router from './router'
 import { initializeApp } from "firebase/app";
+import Vue3Toasity, { type ToastContainerOptions } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 
 
@@ -22,6 +25,7 @@ initializeApp(firebaseConfig);
 const app = createApp(App)
 app.use(createPinia())
 app.use(router)
+app.use(Vue3Toasity);
 
 
 

@@ -2,6 +2,12 @@
 import {useAuthStore} from "@/stores/auth";
 import {ref, watch} from "vue";
 import {ExclamationCircleIcon} from "@heroicons/vue/20/solid";
+import { toast, type ToastOptions } from 'vue3-toastify';
+
+enum responseTypes {
+  success = 'success',
+  error = 'error'
+}
 
 const authStore = useAuthStore();
 const newPassword = ref('');
@@ -31,9 +37,13 @@ const changePassword = async () => {
   }
 
   try {
-    // await authStore.changePassword(newPassword.value);
+    await authStore.changePassword(newPassword.value);
+    newPassword.value = "";
+    newPasswordConfirm.value = "";
+    notify(responseTypes.success);
   } catch (e) {
     console.log(e);
+    notify(responseTypes.error)
   }
 }
 
@@ -52,6 +62,17 @@ const checkPasswords = () => {
   isLength.value = true;
   return true;
 };
+
+const notify = (type: string) => {
+  switch (type) {
+    case 'success':
+      toast.success('The password has been updated',{position: 'top-right', transition: "flip", autoClose: 2000});
+      break;
+    case 'error':
+      toast.error('Something went wrong, try again!',{position: 'top-right', transition: "flip", autoClose: 2000});
+      break;
+  }
+}
 
 </script>
 

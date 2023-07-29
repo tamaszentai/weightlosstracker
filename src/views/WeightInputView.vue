@@ -12,8 +12,6 @@ const {currentUser} = storeToRefs(authStore);
 const weekdaysData = ref(['', '', '', '', '', '', '']);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const today = DateTime.now();
-const weekStartDate = today.startOf('week').toISODate();
-const weekEndDate = today.endOf('week').toISODate();
 const currentWeekNumber = today.weekNumber
 const currentYear = today.year
 
