@@ -2,6 +2,7 @@
 import {ref} from "vue";
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import {useRouter} from "vue-router";
+import oldScale from "@/assets/old-scale.png";
 
 
 const router = useRouter();
@@ -23,11 +24,11 @@ const register = async () => {
 </script>
 <template>
 
-    <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Account
-                registration</h2>
-        </div>
+    <div class="flex min-h-full flex-1 flex-col justify-center px-6 py-8 lg:px-8">
+      <img :src="oldScale" alt="logo" class="block w-16 my-0 mx-auto"/>
+      <div class="sm:mx-auto sm:w-full sm:max-w-sm mb-2">
+        <h2 class="mt-10 text-center text-xl font-bold leading-9 tracking-tight text-gray-900">Account registration</h2>
+      </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form class="space-y-6" @submit.prevent="register">

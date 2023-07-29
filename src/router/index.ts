@@ -11,7 +11,7 @@ import DashboardView from "@/views/DashboardView.vue";
 // @ts-ignore
 import ProfileView from "@/views/ProfileView.vue";
 // @ts-ignore
-import ForgotPassword from "@/views/ForgotPassword.vue";
+import ForgotPasswordView from "@/views/ForgotPasswordView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -36,7 +36,7 @@ const router = createRouter({
         {
             path: '/forgot-password',
             name: 'forgot-password',
-            component: ForgotPassword
+            component: ForgotPasswordView
         },
         {
             path: '/dashboard',
