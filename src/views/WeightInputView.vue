@@ -14,7 +14,7 @@ enum responseTypes {
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);
-const weekdaysData = ref(['', '', '', '', '', '', '']);
+const weekdaysData = ref<any[]>(['', '', '', '', '', '', '']);
 const weekdayLabels = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 const today = DateTime.now();
 const currentWeekNumber = today.weekNumber
@@ -24,13 +24,13 @@ const currentYear = today.year
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
   if (!weightsStore.previousWeek) {
-    weekdaysData.value = weightsStore.currentWeek.days.map((day) => day.weight);
+    weekdaysData.value = weightsStore.currentWeek!.days.map((day) => day.weight);
     return;
   }
 
   if (currentYear >= weightsStore.previousWeek.year) {
     if (currentWeekNumber > weightsStore.previousWeek.weekNumber || currentYear > weightsStore.previousWeek.year) {
-      weekdaysData.value = weightsStore.currentWeek.days.map((day) => day.weight);
+      weekdaysData.value = weightsStore.currentWeek!.days.map((day) => day.weight);
     }
   }
 })
