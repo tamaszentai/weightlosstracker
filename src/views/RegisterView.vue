@@ -8,6 +8,7 @@ import oldScale from "@/assets/old-scale.png";
 const router = useRouter();
 const email = ref("");
 const password = ref("");
+const isError = ref(false);
 
 const register = async () => {
     try {
@@ -15,9 +16,8 @@ const register = async () => {
         router.push("/dashboard")
 
     } catch (error) {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
+      isError.value = true;
+      password.value = "";
     }
 }
 

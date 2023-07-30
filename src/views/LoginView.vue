@@ -27,9 +27,6 @@ const login = async () => {
     } catch (error) {
       isError.value = true;
       password.value = "";
-
-        const errorCode = error.code;
-        const errorMessage = error.message;
     }
 }
 
