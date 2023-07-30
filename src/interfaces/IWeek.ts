@@ -1,4 +1,4 @@
-import {IDay} from "./IDay";
+import {type IDay} from "./IDay";
 
 export interface IWeek {
     weekStartDate: Date,

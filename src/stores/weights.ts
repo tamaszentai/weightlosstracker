@@ -2,7 +2,7 @@ import {computed, ref} from 'vue'
 import {defineStore, storeToRefs} from 'pinia'
 import {getFirestore} from "firebase/firestore";
 import {collection, doc, getDocs, setDoc} from '@firebase/firestore';
-import {IWeek} from "../interfaces/IWeek";
+import {type IWeek} from "@/interfaces/IWeek";
 import {week1, week2, week3, week4} from "@/assets/backup";
 import {useAuthStore} from "@/stores/auth";
 import {DateTime} from "luxon";
