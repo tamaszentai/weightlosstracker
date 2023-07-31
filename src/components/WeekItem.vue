@@ -8,6 +8,7 @@ const isOpen = ref(false);
 const weekToggle = () => {
   isOpen.value = !isOpen.value;
 };
+
 </script>
 
 <template>

@@ -59,7 +59,7 @@ const chartOptions = {
             <p class="text-gray-500">No data to display</p>
         </div>
         <div class="mt-10">
-            <WeekItem v-for="week in reverseWeeks" :key="week.weekStartDate.toDateString()" :week-data="week"/>
+            <WeekItem v-for="week in reverseWeeks" :key="week.year+week.weekNumber.toString()" :week-data="week" />
         </div>
     </div>
 </template>

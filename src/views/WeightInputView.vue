@@ -24,7 +24,6 @@ const currentYear = today.year
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
   if (!weightsStore.previousWeek) {
-    weekdaysData.value = weightsStore.currentWeek!.days.map((day) => day.weight);
     return;
   }
 
@@ -75,7 +74,7 @@ const notify = (type: string) => {
 <template>
     <div class="flex min-h-full flex-1 flex-col justify-center px-6  lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Weekly weight input</h2>
+            <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Current week's weights</h2>
             <h4 class="text-center text-l font-bold leading-9 tracking-tight text-gray-900">Week {{
                 currentWeekNumber
                 }},
