@@ -4,11 +4,26 @@ import {onAuthStateChanged} from "firebase/auth";
 import {onMounted, ref} from "vue";
 import {useAuthStore} from "./stores/auth";
 import {useWeightsStore} from "@/stores/weights";
+import DashboardView from "@/views/DashboardView.vue";
+import ProfileView from "@/views/ProfileView.vue";
 
 const authStore = useAuthStore();
 const weightsStore = useWeightsStore();
 const auth = authStore.auth;
 const isLoggedIn = ref(false);
+
+const routes = [
+  {
+    path: '/dashboard',
+    component: DashboardView,
+    meta: { transition: 'slide-left' },
+  },
+  {
+    path: '/profile',
+    component: ProfileView,
+    meta: { transition: 'slide-right' },
+  },
+]
 
 
 onMounted(() => {
@@ -23,6 +38,12 @@ onMounted(() => {
     <Transition>
         <RouterView/>
     </Transition>
+
+<!--  <router-view v-slot="{ Component }">-->
+<!--    <transition>-->
+<!--      <component :is="Component" />-->
+<!--    </transition>-->
+<!--  </router-view>-->
 </template>
 
 <style scoped>
