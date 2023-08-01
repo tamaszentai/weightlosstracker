@@ -23,6 +23,10 @@ const currentYear = today.year
 
 onMounted(async () => {
   await weightsStore.fetchWeights(currentUser.value?.uid);
+  if (!weightsStore.previousWeek && !weightsStore.currentWeek) {
+    return;
+  }
+
   if (!weightsStore.previousWeek) {
     weekdaysData.value = weightsStore.currentWeek!.days.map((day) => day.weight);
     return;

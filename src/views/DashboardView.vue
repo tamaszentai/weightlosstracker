@@ -5,9 +5,10 @@ import {onMounted, ref, watch} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
 import type {IWeek} from "@/interfaces/IWeek";
-import WeekItem from "@/components/WeekItem.vue";
+// import WeekItem from "@/components/WeekItem.vue";
+import { defineAsyncComponent } from 'vue'
 
-
+const WeekItem = defineAsyncComponent(() => import('@/components/WeekItem.vue'))
 const weightsStore = useWeightsStore();
 const authStore = useAuthStore();
 const {currentUser} = storeToRefs(authStore);

@@ -42,7 +42,7 @@ const login = async () => {
         </div>
 
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-          <div :class=" isError ? 'bg-red-300 my-2 h-10 pt-1 font-normal text-red-900 text-center border-t border-b border-red-900' :'invisible my-2 h-10 pt-1'">Incorrect email address or password</div>
+          <div :class=" isError ? 'bg-red-300 my-2 h-10 pt-1 font-normal text-sm text-red-900 text-center border-t border-b border-red-900' :'invisible my-2 h-10 pt-1'">Incorrect email address or password</div>
             <form class="space-y-6" @submit.prevent="login">
 
                 <div>
