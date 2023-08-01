@@ -28,7 +28,6 @@ onMounted(async () => {
   }
 
   if (!weightsStore.previousWeek) {
-    weekdaysData.value = weightsStore.currentWeek!.days.map((day) => day.weight);
     return;
   }
 

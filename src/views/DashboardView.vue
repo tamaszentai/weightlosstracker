@@ -5,7 +5,6 @@ import {onMounted, ref, watch} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
 import type {IWeek} from "@/interfaces/IWeek";
-// import WeekItem from "@/components/WeekItem.vue";
 import { defineAsyncComponent } from 'vue'
 
 const WeekItem = defineAsyncComponent(() => import('@/components/WeekItem.vue'))
@@ -60,7 +59,7 @@ const chartOptions = {
             <p class="text-gray-500">No data to display</p>
         </div>
         <div class="mt-10">
-            <WeekItem v-for="week in reverseWeeks" :key="week.year+week.weekNumber.toString()" :week-data="week"/>
+            <WeekItem v-for="week in reverseWeeks" :key="week.weekStartDate.toDateString()" :week-data="week"/>
         </div>
     </div>
 </template>

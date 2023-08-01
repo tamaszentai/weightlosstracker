@@ -92,16 +92,16 @@ const notify = (type: string) => {
       <label class="block text-sm font-medium leading-6 text-gray-900">
         New Password
       </label>
-      <div class="mt-1 rounded-md shadow-sm">
+      <div class="mt-1 rounded-md">
         <input v-model="newPassword" type="password"
-               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6"/>
+               class="block w-full border rounded-md border-gray-200 py-1.5 text-gray-900 shadow-sm"/>
       </div>
       <label class="block text-sm font-medium leading-6 text-gray-900">
         Confirm New Password
       </label>
-      <div class="mt-1 rounded-md shadow-sm">
+      <div class="mt-1 rounded-md">
         <input v-model="newPasswordConfirm" type="password"
-               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-green-500 sm:text-sm sm:leading-6"/>
+               class="block w-full border rounded-md border-gray-200 py-1.5 text-gray-900 shadow-sm"/>
       </div>
       <div v-if="!isLength" class="mt-2 flex">
         <ExclamationCircleIcon class="text-red-500 h-6 w-6 inline-block"/>
