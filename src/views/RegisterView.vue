@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, ref, watch} from "vue";
 import {getAuth, createUserWithEmailAndPassword} from "firebase/auth";
 import {useRouter} from "vue-router";
 import oldScale from "@/assets/old-scale.png";
@@ -9,6 +9,19 @@ const router = useRouter();
 const email = ref("");
 const password = ref("");
 const isError = ref(false);
+const errorMessage = ref('');
+
+watch(email, (newEmail) => {
+    if (newEmail) {
+        isError.value = false;
+    }
+});
+
+watch(password, (newPassword) => {
+    if (newPassword) {
+        isError.value = false;
+    }
+});
 
 const register = async () => {
     try {
@@ -17,9 +30,23 @@ const register = async () => {
 
     } catch (error) {
       isError.value = true;
+      errorMessage.value = error.message;
       password.value = "";
     }
 }
+
+const errorMessageComputed = computed(() => {
+    let message = '';
+    if (isError.value) {
+        if (errorMessage.value.includes('auth/email-already-in-use')) {
+            message = 'This email is already in use';
+        }
+        if (errorMessage.value.includes('Password should be at least 6 characters')) {
+            message = 'Password should be at least 6 characters';
+        }
+    }
+    return message;
+})
 
 </script>
 <template>
@@ -31,6 +58,8 @@ const register = async () => {
       </div>
 
         <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+            <div :class=" isError ? 'bg-red-300 my-2 h-10 pt-1 font-normal text-sm text-red-900 text-center border-t border-b border-red-900' :'invisible my-2 h-10 pt-1'">
+                {{ errorMessageComputed }}</div>
             <form class="space-y-6" @submit.prevent="register">
                 <div>
                     <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
