@@ -12,7 +12,7 @@ const weekToggle = () => {
 </script>
 
 <template>
-    <div class="mt-2 mb-2 grid grid-cols-1 sm:grid-cols-2">
+    <div class="mt-2 mb-2 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 md:px-10 md:mb-5 lg:px-96">
         <div
                 :class="isOpen ? 'overflow-hidden week-expanded bg-green-200 relative flex flex-row-reverse space-x-3 rounded-xl border border-gray-300 px-6 py-5 shadow-md cursor-pointer' : 'week overflow-hidden bg-green-200 shadow-md relative flex flex-row-reverse space-x-3 rounded-xl border border-gray-300 px-6 py-5 focus-within:ring-2 cursor-pointer'"
                 @click="weekToggle">
