@@ -76,7 +76,7 @@ const notify = (type: string) => {
 </script>
 
 <template>
-    <div class="flex min-h-full flex-1 flex-col justify-center px-6  lg:px-8 lg:w-80">
+    <div class="flex min-h-full flex-1 flex-col justify-center px-6 my-0 mx-auto  lg:px-8">
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Current week's weights</h2>
             <h4 class="text-center text-l font-bold leading-9 tracking-tight text-gray-900">Week {{
@@ -85,7 +85,7 @@ const notify = (type: string) => {
                 {{ currentYear }}</h4>
         </div>
 
-        <div class="mt-10 sm:w-full sm:max-w-sm">
+        <div class="mt-10 lg:w-1/2 lg:my-0 lg:mx-auto">
             <form class="space-y-6" @submit.prevent="submitData">
                 <div v-for="(day, index) in weekdaysData" :key="index" class="flex items-center justify-between">
                     <label for="day" class="block text-sm font-medium leading-6 text-gray-900">{{

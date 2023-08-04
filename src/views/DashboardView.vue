@@ -50,15 +50,18 @@ const chartOptions = {
         <div class="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Dashboard</h2>
         </div>
+      <div class="lg:w-1/2 lg:my-0 lg:mx-auto">
         <GChart v-if="chartData && chartData.length > 1"
                 type="ColumnChart"
                 :data="chartData"
                 :options="chartOptions"
         />
+
         <div v-else class="flex justify-center items-center h-64">
             <p class="text-gray-500">No data to display</p>
         </div>
-        <div class="mt-10 lg:my-0 md:mx-auto lg:mx-auto md:w-full">
+      </div>
+        <div class="lg:mt-36 lg:my-0 md:mx-auto lg:mx-auto md:w-full">
             <WeekItem v-for="week in reverseWeeks" :key="week.year+week.weekNumber.toString()" :week-data="week"/>
         </div>
     </div>

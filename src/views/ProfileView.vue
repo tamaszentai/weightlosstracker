@@ -76,7 +76,7 @@ const notify = (type: string) => {
 </script>
 
 <template>
-  <div class="flex min-h-full flex-1 flex-col justify-center px-6  lg:px-8">
+  <div class="flex min-h-full flex-1 flex-col justify-center px-6 my-0 mx-auto lg:px-8 lg:w-1/2 lg:my-0 lg:mx-auto">
     <div v-if="authStore.currentUser">
       <div class="sm:mx-auto sm:w-full sm:max-w-sm">
         <h2 class="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Profile</h2>
